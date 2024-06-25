@@ -1,7 +1,8 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-
-require("dotenv").config();
-
+import * as dotenv from "dotenv";
+import { Injectable } from "@nestjs/common";
+dotenv.config();
+@Injectable()
 class ConfigService {
   constructor(private env: { [k: string]: string | undefined }) {}
 
@@ -37,12 +38,9 @@ class ConfigService {
       username: this.getValue("POSTGRES_USER"),
       password: this.getValue("POSTGRES_PASSWORD"),
       database: this.getValue("POSTGRES_DATABASE"),
-
-      entities: ["**/*.entity{.ts,.js}"],
-
+      entities: ["dist/**/*.entity{.ts,.js}"],
       migrationsTableName: "migration",
-
-      migrations: ["src/migration/*.ts"],
+      migrations: ["dist/migration/*.js"],
       ssl: this.isProduction(),
     };
   }
@@ -56,4 +54,4 @@ const configService = new ConfigService(process.env).ensureValues([
   "POSTGRES_DATABASE",
 ]);
 
-export { configService };
+export { configService, ConfigService };
