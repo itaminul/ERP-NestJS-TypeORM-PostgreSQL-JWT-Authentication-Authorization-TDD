@@ -1,13 +1,13 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import * as dotenv from "dotenv";
-import { Injectable } from "@nestjs/common";
-dotenv.config();
+import { Injectable } from '@nestjs/common';
+import { ConfigService as NestConfigService } from '@nestjs/config';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 @Injectable()
-class ConfigService {
-  constructor(private env: { [k: string]: string | undefined }) {}
+export class ConfigService {
+  constructor(private nestConfigService: NestConfigService) {}
 
   private getValue(key: string, throwOnMissing = true): string {
-    const value = this.env[key];
+    const value = this.nestConfigService.get<string>(key);
     if (!value && throwOnMissing) {
       throw new Error(`config error - missing env.${key}`);
     }
@@ -21,37 +21,27 @@ class ConfigService {
   }
 
   public getPort() {
-    return this.getValue("PORT", true);
+    return this.getValue('PORT', true);
   }
 
   public isProduction() {
-    const mode = this.getValue("MODE", false);
-    return mode != "DEV";
+    const mode = this.getValue('MODE', false);
+    return mode !== 'DEV';
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
+    const isProduction = this.isProduction();
     return {
-      type: "postgres",
-
-      host: this.getValue("POSTGRES_HOST"),
-      port: parseInt(this.getValue("POSTGRES_PORT")),
-      username: this.getValue("POSTGRES_USER"),
-      password: this.getValue("POSTGRES_PASSWORD"),
-      database: this.getValue("POSTGRES_DATABASE"),
-      entities: ["dist/**/*.entity{.ts,.js}"],
-      migrationsTableName: "migration",
-      migrations: ["dist/migration/*.js"],
-      ssl: this.isProduction(),
+      type: 'postgres',
+      host: this.getValue('POSTGRES_HOST'),
+      port: parseInt(this.getValue('POSTGRES_PORT')),
+      username: this.getValue('POSTGRES_USER'),
+      password: this.getValue('POSTGRES_PASSWORD'),
+      database: this.getValue('POSTGRES_DATABASE'),
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      migrationsTableName: 'migration',
+      migrations: ['dist/migration/*.js'],
+      ssl: isProduction ? { rejectUnauthorized: false } : false, // Adjust SSL settings based on environment
     };
   }
 }
-
-const configService = new ConfigService(process.env).ensureValues([
-  "POSTGRES_HOST",
-  "POSTGRES_PORT",
-  "POSTGRES_USER",
-  "POSTGRES_PASSWORD",
-  "POSTGRES_DATABASE",
-]);
-
-export { configService, ConfigService };
