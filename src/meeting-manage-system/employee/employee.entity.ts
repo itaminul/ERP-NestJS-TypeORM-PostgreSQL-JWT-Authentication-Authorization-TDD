@@ -5,7 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-// import { Department } from "src/global-setup/department/department.entity";
+import { Department } from "src/global-setup/department/department.entity";
 @Entity()
 export class Employee {
   @PrimaryGeneratedColumn()
@@ -38,4 +38,8 @@ export class Employee {
   empSignature: string;
   @Column()
   nationalId: number;
+
+  @OneToOne(() => Department)
+  @JoinColumn()
+  department: Department;
 }
