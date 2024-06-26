@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from "./config/config.service";
+import { EmployeeModule } from './meeting-manage-system/employee/employee.module';
+import { DepartmentModule } from './global-setup/department/department.module';
 @Module({
   imports: [
     ConfigModule,
@@ -13,6 +15,8 @@ import { ConfigService } from "./config/config.service";
         configService.getTypeOrmConfig(),
       inject: [ConfigService],
     }),
+    EmployeeModule,
+    DepartmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
