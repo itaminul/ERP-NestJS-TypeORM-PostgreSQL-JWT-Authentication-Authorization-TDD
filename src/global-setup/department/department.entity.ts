@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Department {
@@ -18,13 +18,13 @@ export class Department {
   activeStatus: boolean;
   @Column()
   createdBy: number;
-  @Column({ default: Date() })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
-  @Column()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: string;
   @Column()
   updatedTime: string;
-  @Column()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
   @Column()
   updatedBy: number;
