@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
   password: '123456',
   database: 'erp_db1',
   entities: [Department, Employee],
-  migrations: ['src/migrations/*.ts'],
+  migrations: ['src/migrations/*.{ts,js}'],
   synchronize: false,
 });
 
