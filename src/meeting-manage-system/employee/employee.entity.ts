@@ -1,3 +1,4 @@
+import { Department } from "src/global-setup/department/department.entity";
 import {
   Entity,
   Column,
@@ -5,7 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { Department } from "src/global-setup/department/department.entity";
+
 
 @Entity()
 export class Employee {
