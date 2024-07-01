@@ -1,9 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from "@nestjs/common";
@@ -53,6 +57,27 @@ export class DepartmentController {
       };
     } catch (error) {
       throw error;
+    }
+  }
+  @Delete(":id")
+  @HttpCode(HttpStatus.OK)
+  async deleteDepartmentById(@Param("id", ParseIntPipe) id: number) {
+    try {
+      const results = await this.departmentService.deleteDepartmentById(id);
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          "Failed to delete department",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      }
     }
   }
 }
