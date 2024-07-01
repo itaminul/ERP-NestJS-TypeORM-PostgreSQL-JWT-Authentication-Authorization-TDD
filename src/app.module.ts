@@ -6,11 +6,11 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from "./config/config.service";
 import { EmployeeModule } from './meeting-manage-system/employee/employee.module';
 import { DepartmentModule } from './global-setup/department/department.module';
-import { AppDataSource } from '../data-source';
+import { dataSourceOptions } from './data-source';
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forRoot(AppDataSource.options),
+    TypeOrmModule.forRoot(dataSourceOptions),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) =>
@@ -24,3 +24,6 @@ import { AppDataSource } from '../data-source';
   providers: [AppService],
 })
 export class AppModule {}
+
+
+
