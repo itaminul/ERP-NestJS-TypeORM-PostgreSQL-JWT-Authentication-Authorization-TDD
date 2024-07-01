@@ -4,28 +4,28 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 export class Department {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({ nullable: true})
   salary: number;
-  @Column()
+  @Column({ nullable: false})
   departmentName: string;
   @Column()
   departmentDescription: string;
-  @Column()
+  @Column({ nullable: true})
   orgId: number;
-  @Column()
+  @Column({ nullable: true})
   serialNo: number;
   @Column({ default: true })
   activeStatus: boolean;
-  @Column()
+  @Column({ nullable: true})
   createdBy: number;
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ type: 'timestamptz', nullable: true })
   createdAt: Date;
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ type: 'timestamptz', nullable: true })
   updatedDate: string;
-  @Column()
+  @Column({ nullable: true})
   updatedTime: string;
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ type: 'timestamptz', nullable: true })
   updatedAt: Date;
-  @Column()
+  @Column({ nullable: true})
   updatedBy: number;
 }
