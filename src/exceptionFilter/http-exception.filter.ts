@@ -1,4 +1,10 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -6,16 +12,24 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message: exception instanceof HttpException ? exception.getResponse() : 'Internal server error',
+      message:
+        exception instanceof HttpException
+          ? exception.getResponse()
+          : "Internal server error",
     };
 
-    console.error(`HTTP Status: ${status} Error Message: ${JSON.stringify(errorResponse)}`);
+    console.error(
+      `HTTP Status: ${status} Error Message: ${JSON.stringify(errorResponse)}`
+    );
 
     response.status(status).json(errorResponse);
   }
