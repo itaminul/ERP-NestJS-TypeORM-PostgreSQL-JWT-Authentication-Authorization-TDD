@@ -17,6 +17,7 @@ export class EmployeeService {
   async getAll() {
     return await this.employeeRepository
       .createQueryBuilder("employee")
+      .leftJoinAndSelect("employee.department","departmentName")
       .getMany();
   }
 
@@ -85,7 +86,7 @@ export class EmployeeService {
           where: { id: updateEmployeeDto.departmentId },
         });
 
-        if (!employee) {
+        if (!department) {
           throw new HttpException(
             {
               statusCode: HttpStatus.NOT_FOUND,
