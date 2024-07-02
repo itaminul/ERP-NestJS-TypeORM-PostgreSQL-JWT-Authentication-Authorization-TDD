@@ -4,12 +4,19 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
   Post,
+  UseFilters,
 } from "@nestjs/common";
 import { EmployeeService } from "./employee.service";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
+import { UpdateEmployeeDTO } from "./dto/update.employee.dto";
+import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
 
 @Controller("employee")
+@UseFilters(AllExceptionsFilter)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
@@ -26,6 +33,35 @@ export class EmployeeController {
       throw error;
     }
   }
+
+  @Get("/getAllActive")
+  async getAllActive() {
+    try {
+      const results = await this.employeeService.getAllActive();
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get("/getAllInActive")
+  async getAllInActive() {
+    try {
+      const results = await this.employeeService.getAllInactive();
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Post()
   async creaet(@Body() employeeDto: CreateEmployeeDTO) {
     try {
@@ -33,7 +69,7 @@ export class EmployeeController {
       return {
         success: true,
         status: HttpStatus.OK,
-        results,
+        results: results,
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -47,8 +83,24 @@ export class EmployeeController {
     }
   }
 
-  async update() {
+  @Patch(":id")
+  async update(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateEmployeeDto: UpdateEmployeeDTO
+  ) {
     try {
-    } catch (error) {}
+      const updatedEmployee = await this.employeeService.update(
+        id,
+        updateEmployeeDto
+      );
+      return {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "Employee updated successfully",
+        data: updatedEmployee,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

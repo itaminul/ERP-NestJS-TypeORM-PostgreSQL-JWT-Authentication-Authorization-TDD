@@ -32,6 +32,34 @@ export class DepartmentController {
       throw error;
     }
   }
+
+  @Get("/getAllActive")
+  async getAllActive() {
+    try {
+      const results = await this.departmentService.getAll();
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get("/getAllInActive")
+  async getAllInActive() {
+    try {
+      const results = await this.departmentService.getAll();
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
   @Post()
   async create(@Body() dto: DepartmentCreateDTO) {
     try {
@@ -67,7 +95,7 @@ export class DepartmentController {
       return {
         success: true,
         status: HttpStatus.OK,
-        results
+        results,
       };
     } catch (error) {
       if (error instanceof HttpException) {

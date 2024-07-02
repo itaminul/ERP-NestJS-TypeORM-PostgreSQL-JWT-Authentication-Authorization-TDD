@@ -48,9 +48,9 @@ export class UpdateEmployeeDTO {
   @IsString()
   @IsOptional()
   empSignature: string;
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  nationalId: string;
+  nationalId: number;
   @IsNumber()
   @IsOptional()
   createdBy: number;
