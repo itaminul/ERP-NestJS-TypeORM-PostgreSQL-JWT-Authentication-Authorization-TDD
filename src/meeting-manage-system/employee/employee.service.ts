@@ -17,7 +17,8 @@ export class EmployeeService {
   async getAll() {
     return await this.employeeRepository
       .createQueryBuilder("employee")
-      .leftJoinAndSelect("employee.department","departmentName")
+      .leftJoinAndSelect("employee.department", "departmentName")
+      .orderBy("employee.id", "DESC")
       .getMany();
   }
 
@@ -25,6 +26,7 @@ export class EmployeeService {
     return await this.employeeRepository
       .createQueryBuilder("employee")
       .where("employee.activeStatus =: activeStatus", { activeStatus: 1 })
+      .orderBy("employee.id", "DESC")
       .getMany();
   }
 
@@ -32,6 +34,7 @@ export class EmployeeService {
     return await this.employeeRepository
       .createQueryBuilder("employee")
       .where("employee.activeStatus =: activeStatus", { activeStatus: 0 })
+      .orderBy("employee.id", "DESC")
       .getMany();
   }
   async create(createEmployeeDto: CreateEmployeeDTO) {
