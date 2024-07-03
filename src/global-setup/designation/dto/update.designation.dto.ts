@@ -1,8 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 @Injectable()
-export class CreateDesignationDTO {
+export class UpdateDesignationDTO {
   @IsNotEmpty()
   @IsString()
   designationName: string;
@@ -18,4 +24,8 @@ export class CreateDesignationDTO {
   @IsOptional()
   @IsNumber()
   serialNo: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  activeStatus: boolean;
 }
