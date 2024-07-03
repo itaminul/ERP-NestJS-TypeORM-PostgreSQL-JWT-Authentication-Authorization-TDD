@@ -1,13 +1,14 @@
 {
   "type": "postgres",
-  "host": "localhost",
+  "host": "127.0.0.1",
   "port": 5432,
   "username": "erpdb",
   "password": "123456",
   "database": "erp_db1",
-  "entities": ["dist/**/*.entity.{ts,js}"],
+  "entities": ["join(__dirname, '**', '*.entity.{ts,js}')"],
   "migrations": ["dist/migrations/*.js"],
   "cli": {
     "migrationsDir": "src/migrations"
-  }
+  },
+  "synchronize": false
 }

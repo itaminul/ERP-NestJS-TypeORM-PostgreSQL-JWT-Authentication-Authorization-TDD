@@ -16,8 +16,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "esModuleInterop": true,
   },
-  "include": ["src/**/*", "data-source.ts"],
+  "paths": {
+      "@entities/*": ["src/entities/*"]
+    },
+  "include": [
+      "./src/**/*",
+      "migrations/**/*.ts"
+],
   "exclude": ["node_modules"]
 }
