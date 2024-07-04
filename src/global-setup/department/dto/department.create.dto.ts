@@ -5,21 +5,21 @@ import { IsNumber, IsOptional, IsString } from "class-validator";
 export class DepartmentCreateDTO {
   @IsNumber()
   @IsOptional()
-  salary;
+  salary: number
 
   @IsString()
   @IsOptional()
-  departmentName;
+  departmentName: string
 
   @IsString()
   @IsOptional()
-  departmentDescription;
+  departmentDescription: string
 
   @IsNumber()
   @IsOptional()
-  orgId;
+  orgId: number
 
   @IsNumber()
   @IsOptional()
-  serialNo;
+  serialNo: number
 }
