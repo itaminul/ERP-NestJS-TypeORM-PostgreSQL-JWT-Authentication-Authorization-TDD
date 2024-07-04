@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Department } from "src/entities/department.entity";
 import { Repository } from "typeorm";
@@ -13,6 +13,27 @@ export class DepartmentService {
   ) {}
   async getAll() {
     return await this.departmentRepository.find({
+      order: {
+        id: "desc",
+      },
+    });
+  }
+
+  async getAllActive() {
+    return await this.departmentRepository.find({
+      where: {
+        activeStatus: true,
+      },
+      order: {
+        id: "desc",
+      },
+    });
+  }
+  async getAllInActive() {
+    return await this.departmentRepository.find({
+      where: {
+        activeStatus: false,
+      },
       order: {
         id: "desc",
       },
@@ -57,6 +78,23 @@ export class DepartmentService {
       return await this.departmentRepository.update(id, department);
     } catch (error) {
       throw new Error("Failed to save departments");
+    }
+  }
+
+  async deleteDepartmentById(id: number) {
+    try {
+      const result = await this.departmentRepository.delete(id);
+      if (result.affected === 0) {
+        throw new HttpException("Department not found", HttpStatus.NOT_FOUND);
+      }
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        "Failed to delete department",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }
