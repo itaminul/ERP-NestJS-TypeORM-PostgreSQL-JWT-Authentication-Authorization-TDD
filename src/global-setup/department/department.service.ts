@@ -68,6 +68,15 @@ export class DepartmentService {
         orgId,
         activeStatus,
       } = updateDepartmentDto;
+      // Check if department exists
+      const existCheck = await this.departmentRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+      if (!existCheck) {
+        throw new HttpException("Department not found", HttpStatus.NOT_FOUND);
+      }
       const department = new Department();
       department.departmentName = departmentName;
       department.departmentDescription = departmentDescription;
