@@ -24,7 +24,7 @@ import { MeetingManageSystemModule } from './modules/meeting.manage.system';
     }),
     EmployeeModule,
     DepartmentModule,
-    MeetingManageSystemModule
+    MeetingManageSystemModule,
   ],
   controllers: [AppController],
   providers: [
