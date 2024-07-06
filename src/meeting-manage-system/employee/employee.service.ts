@@ -15,11 +15,20 @@ export class EmployeeService {
     private readonly departmentRepository: Repository<Department>
   ) {}
   async getAll() {
-    return await this.employeeRepository
-      .createQueryBuilder("employee")
-      .leftJoinAndSelect("employee.department", "departmentName")
-      .orderBy("employee.id", "DESC")
-      .getMany();
+    return await this.employeeRepository.find({
+      relations: {
+        department: true,
+        designation: true,
+      },
+      order: {
+        id: 'DESC'
+      }
+    });
+    // return await this.employeeRepository
+    //   .createQueryBuilder("employee")
+    //   .leftJoinAndSelect("employee.department", "departmentName")
+    //   .orderBy("employee.id", "DESC")
+    //   .getMany();
   }
 
   async getAllActive() {
