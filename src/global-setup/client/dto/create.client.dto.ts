@@ -22,6 +22,6 @@ export class CreateClientDTO {
   @IsNumber()
   orgId: number;
   @IsOptional()
-  @IsString()
-  serialNo: string;
+  @IsNumber()
+  serialNo: number;
 }

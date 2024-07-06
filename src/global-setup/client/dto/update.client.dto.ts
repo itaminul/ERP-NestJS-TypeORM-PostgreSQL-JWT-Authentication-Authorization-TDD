@@ -28,8 +28,8 @@ export class UpdateClientDTO {
   @IsNumber()
   orgId: number;
   @IsOptional()
-  @IsString()
-  serialNo: string;
+  @IsNumber()
+  serialNo: number;
   @IsNotEmpty()
   @IsBoolean()
   activeStatus: boolean;
