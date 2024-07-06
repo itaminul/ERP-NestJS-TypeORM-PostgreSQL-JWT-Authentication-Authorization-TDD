@@ -18,6 +18,22 @@ export class ClientService {
       .getMany();
   }
 
+  async getAllActive() {
+    return await this.clientRepository
+      .createQueryBuilder("Client")
+      .where({ orgId: 1 })      
+      .where({ activeStatus: true })      
+      .getMany();
+  }
+
+  async getAllInactive() {
+    return await this.clientRepository
+      .createQueryBuilder("Client")
+      .where({ orgId: 1 })
+      .where({ activeStatus: true })  
+      .getMany();
+  }
+
   async create(createClientDTO: CreateClientDTO) {
     const clientData = this.clientRepository.create(createClientDTO);
     return await this.clientRepository.save(clientData);
