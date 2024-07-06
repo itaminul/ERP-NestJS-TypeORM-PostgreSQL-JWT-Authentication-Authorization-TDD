@@ -7,6 +7,8 @@ import { ConfigService } from "./config/config.service";
 import { EmployeeModule } from './meeting-manage-system/employee/employee.module';
 import { DepartmentModule } from './global-setup/department/department.module';
 import { dataSourceOptions } from './data-source';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './exceptionFilter/http-exception.filter';
 @Module({
   imports: [
     ConfigModule,
@@ -21,7 +23,13 @@ import { dataSourceOptions } from './data-source';
     DepartmentModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService, // Add AppService to the providers array
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
 
