@@ -56,5 +56,9 @@ export class UpdateEmployeeDTO {
   createdBy: number;
   @IsBoolean()
   @IsNotEmpty()
-  activeStatus;
+  activeStatus: boolean
+  @IsNumber()
+  @IsOptional()
+  departmentId: number;
+  
 }

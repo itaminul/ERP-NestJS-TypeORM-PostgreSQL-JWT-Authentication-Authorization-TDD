@@ -2,10 +2,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Department } from "./department.entity";
 
@@ -13,7 +13,7 @@ import { Department } from "./department.entity";
 export class Employee {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   salary: number;
   @Column({ nullable: true })
   firstName: string;
@@ -31,7 +31,7 @@ export class Employee {
   mobileTwo: string;
   @Column()
   emergencyMobile: string;
-  @Column()
+  @Column({ nullable: false })
   officeEmail: string;
   @Column({ nullable: true })
   personalEmail: string;
@@ -54,7 +54,13 @@ export class Employee {
   updatedAt: Date;
   @Column({ nullable: true })
   updatedBy: number;
-  @OneToOne(() => Department)
-  @JoinColumn()
+
+  @ManyToOne(() => Department, (department) => department.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "departmentId" })
   department: Department;
+  @Column({ nullable: true })
+  departmentId: number;
+  
 }

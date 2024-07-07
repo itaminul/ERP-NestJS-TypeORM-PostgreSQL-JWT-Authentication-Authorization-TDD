@@ -48,4 +48,7 @@ export class CreateEmployeeDTO {
   @IsNumber()
   @IsOptional()
   createdBy: number;
+  @IsNumber()
+  @IsOptional()
+  departmentId: number;
 }

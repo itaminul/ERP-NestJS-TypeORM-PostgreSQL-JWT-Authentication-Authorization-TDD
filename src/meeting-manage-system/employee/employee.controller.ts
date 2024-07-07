@@ -61,6 +61,7 @@ export class EmployeeController {
       throw error;
     }
   }
+  
 
   @Post()
   async creaet(@Body() employeeDto: CreateEmployeeDTO) {
@@ -68,8 +69,9 @@ export class EmployeeController {
       const results = await this.employeeService.create(employeeDto);
       return {
         success: true,
-        status: HttpStatus.OK,
-        results: results,
+        statusCode: HttpStatus.OK,
+        message: "Employee Createded successfully",
+        data: results,
       };
     } catch (error) {
       if (error instanceof HttpException) {
