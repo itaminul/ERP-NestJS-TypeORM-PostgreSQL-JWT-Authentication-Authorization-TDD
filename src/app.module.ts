@@ -10,6 +10,7 @@ import { dataSourceOptions } from './data-source';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './exceptionFilter/http-exception.filter';
 import { MeetingManageSystemModule } from './modules/meeting.manage.system';
+import { EmployeTypeModule } from './global-setup/employe-type/employe-type.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { MeetingManageSystemModule } from './modules/meeting.manage.system';
     EmployeeModule,
     DepartmentModule,
     MeetingManageSystemModule,
+    EmployeTypeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -5,6 +5,7 @@ import { Designation } from "./entities/designation.entity";
 import { Religion } from "./entities/religion.entity";
 import { BloodGroup } from "./entities/bloodgroup.entity";
 import { Client } from "./entities/client.entity";
+import { Payment } from "./entities/payment.entity";
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
   host: "localhost",
@@ -12,7 +13,15 @@ export const dataSourceOptions: DataSourceOptions = {
   username: "erpdb",
   password: "123456",
   database: "erp_db1",
-  entities: [Department, Employee, Designation, Religion, BloodGroup, Client],
+  entities: [
+    Department,
+    Employee,
+    Designation,
+    Religion,
+    BloodGroup,
+    Client,
+    Payment,
+  ],
   migrations: ["dist/migrations/*.js"],
 };
 const dataSource = new DataSource(dataSourceOptions);
