@@ -9,6 +9,9 @@ import { DepartmentModule } from './global-setup/department/department.module';
 import { dataSourceOptions } from './data-source';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './exceptionFilter/http-exception.filter';
+import { MeetingManageSystemModule } from './modules/meeting.manage.system';
+
+
 @Module({
   imports: [
     ConfigModule,
@@ -21,6 +24,7 @@ import { AllExceptionsFilter } from './exceptionFilter/http-exception.filter';
     }),
     EmployeeModule,
     DepartmentModule,
+    MeetingManageSystemModule
   ],
   controllers: [AppController],
   providers: [
