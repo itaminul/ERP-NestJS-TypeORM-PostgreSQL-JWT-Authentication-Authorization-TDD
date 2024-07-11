@@ -8,6 +8,9 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Department } from "./department.entity";
+import { Designation } from "./designation.entity";
+import { Religion } from "./religion.entity";
+import { BloodGroup } from "./bloodgroup.entity";
 
 @Entity()
 export class Employee {
@@ -41,6 +44,35 @@ export class Employee {
   empSignature: string;
   @Column({ nullable: true })
   nationalId: number;
+  @Column({ nullable: true })
+  empType: number;
+  @Column({ nullable: true })
+  leaveApplicableStatus: boolean;
+  @Column({ nullable: true })
+  dateOfBirts: string;
+  @Column({ nullable: false })
+  genderId: number;
+  @Column({ nullable: true })
+  bloodGroupId: number;
+  @Column({ nullable: true })
+  maritialStatus: boolean;
+  @Column({ nullable: true })
+  spousName: string;
+  @Column({ nullable: true })
+  spouseProfe: number;
+  @Column({ nullable: true })
+  fatherOrHusbandName: string;
+  @Column({ nullable: true })
+  fatherOrHusbandProfe: number;
+  @Column({ nullable: true })
+  fatherOrHusbandMobile: string;
+  @Column({ nullable: true })
+  motherName: string;
+  @Column({ nullable: true })
+  motherProfe: number;
+  @Column({ nullable: true })
+  motherMobile: string;
+  @Column()
   activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
@@ -62,5 +94,24 @@ export class Employee {
   department: Department;
   @Column({ nullable: true })
   departmentId: number;
-  
+
+  @ManyToOne(() => Designation, (designation) => designation.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "designationId" })
+  designation: Designation;
+  @Column({ nullable: true })
+  designationId: number;
+
+  @ManyToOne(() => Religion, (religion) => religion.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "religionId" })
+  @Column({ nullable: true })
+  religionId: number;
+
+  @ManyToOne(() => BloodGroup, (bloodgroup) => bloodgroup.employees)
+  @JoinColumn({ name: "bloodgroupId" })
+  @Column({ nullable: true })
+  bloodgroupId: number;
 }
