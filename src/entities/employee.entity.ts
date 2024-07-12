@@ -11,6 +11,7 @@ import { Department } from "./department.entity";
 import { Designation } from "./designation.entity";
 import { Religion } from "./religion.entity";
 import { BloodGroup } from "./bloodgroup.entity";
+import { IsBoolean, IsNumber } from "class-validator";
 
 @Entity()
 export class Employee {
@@ -50,7 +51,7 @@ export class Employee {
   leaveApplicableStatus: boolean;
   @Column({ nullable: true })
   dateOfBirts: string;
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   genderId: number;
   @Column({ nullable: true })
   bloodGroupId: number;
@@ -72,7 +73,7 @@ export class Employee {
   motherProfe: number;
   @Column({ nullable: true })
   motherMobile: string;
-  @Column()
+  @Column({ default: true, nullable: false }) 
   activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
@@ -107,11 +108,15 @@ export class Employee {
     nullable: true,
   })
   @JoinColumn({ name: "religionId" })
+  religion: Religion;
   @Column({ nullable: true })
   religionId: number;
 
-  @ManyToOne(() => BloodGroup, (bloodgroup) => bloodgroup.employees)
+  @ManyToOne(() => BloodGroup, (bloodgroup) => bloodgroup.employees, {
+    nullable: true,
+  })
   @JoinColumn({ name: "bloodgroupId" })
+  bloodgroup: BloodGroup;
   @Column({ nullable: true })
   bloodgroupId: number;
 }

@@ -14,20 +14,15 @@ export class EmployeeType {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  @IsString()
   empTypeName: string;
   @Column({ nullable: true })
-  @IsString()
   empTypeDes: string;
   @Column({ nullable: true })
-  @IsNumber()
   orgId: number;
   @Column({ nullable: true })
-  @IsNumber()
   serialNo: number;
   @Column({ default: true })
-  @IsBoolean()
-  activeStatus;
+  isActive: boolean
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })

@@ -14,20 +14,15 @@ export class Designation {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  @IsString()
   designationName: string;
   @Column({ nullable: true })
-  @IsString()
   designationDes: string;
   @Column({ nullable: true })
-  @IsNumber()
   orgId: number;
   @Column({ nullable: true })
-  @IsNumber()
   serialNo: number;
   @Column({ default: true })
-  @IsBoolean()
-  activeStatus;
+  activeStatus: boolean
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })

@@ -14,20 +14,15 @@ export class Religion {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  @IsString()
   religionName: string;
   @Column({ nullable: true })
-  @IsString()
   religionDes: string;
   @Column({ nullable: true })
-  @IsNumber()
   orgId: number;
   @Column({ nullable: true })
-  @IsNumber()
   serialNo: number;
   @Column({ default: true })
-  @IsBoolean()
-  activeStatus;
+  activeStatus: boolean
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })
