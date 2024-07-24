@@ -5,9 +5,14 @@ import { Designation } from "./entities/designation.entity";
 import { Religion } from "./entities/religion.entity";
 import { BloodGroup } from "./entities/bloodgroup.entity";
 import { Client } from "./entities/client.entity";
-import { Payment } from "./entities/payment.entity";
+import { User } from "./entities/user.entity";
+import { Role } from "./entities/role.entity";
+import { EmployeeType } from "./entities/employeeType.entity";
+import { DivisionEntity } from "./entities/division.entity";
+import { DistrictEntity } from "./entities/district.entity";
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
+  name: "pm_main",
   host: "localhost",
   port: 5432,
   username: "erpdb",
@@ -20,7 +25,11 @@ export const dataSourceOptions: DataSourceOptions = {
     Religion,
     BloodGroup,
     Client,
-    Payment,
+    EmployeeType,
+    DivisionEntity,
+    DistrictEntity,
+    User,
+    Role,
   ],
   migrations: ["dist/migrations/*.js"],
 };

@@ -9,26 +9,17 @@ import {
 import { Employee } from "./employee.entity";
 
 @Entity()
-export class EmployeeType {
-  static employees(
-    arg0: () => any,
-    employees: any,
-    arg2: { nullable: true }
-  ): (target: Employee, propertyKey: "empType") => void {
-    throw new Error("Method not implemented.");
-  }
+export class DistrictEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  empTypeName: string;
+  districtName: string;
   @Column({ nullable: true })
-  empTypeDes: string;
-  @Column({ nullable: true })
-  orgId: number;
+  districtDescription: string;
   @Column({ nullable: true })
   serialNo: number;
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ default: true, nullable: false })
+  activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })
@@ -41,8 +32,6 @@ export class EmployeeType {
   updatedAt: Date;
   @Column({ nullable: true })
   updatedBy: number;
-  @OneToMany(() => Employee, (employee) => employee.bloodGroupId)
+  @OneToMany(() => Employee, (employee) => employee.districtId)
   employees: Employee[];
-  @OneToMany(() => Employee, (employee) => employee.empType)
-  empType: Employee[];
 }

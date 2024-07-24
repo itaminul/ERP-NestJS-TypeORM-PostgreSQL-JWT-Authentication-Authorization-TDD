@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
 import { UpdateEmployeeDTO } from "./dto/update.employee.dto";
 import { Department } from "src/entities/department.entity";
+import { EmployeeType } from "src/entities/employeeType.entity";
 
 @Injectable()
 export class EmployeeService {
@@ -12,23 +13,31 @@ export class EmployeeService {
     @InjectRepository(Employee)
     public readonly employeeRepository: Repository<Employee>,
     @InjectRepository(Department)
-    private readonly departmentRepository: Repository<Department>
+    private readonly departmentRepository: Repository<Department>,
+    @InjectRepository(EmployeeType)
+    private readonly employeeType: Repository<EmployeeType>
   ) {}
   async getAll() {
-    return await this.employeeRepository.find({
-      relations: {
-        department: true,
-        designation: true,
-      },
-      order: {
-        id: 'DESC'
-      }
-    });
-    // return await this.employeeRepository
-    //   .createQueryBuilder("employee")
-    //   .leftJoinAndSelect("employee.department", "departmentName")
-    //   .orderBy("employee.id", "DESC")
-    //   .getMany();
+    // return await this.employeeRepository.find({
+    //   relations: {
+    //     department: true,
+    //     designation: true,
+    //     empType: true,
+
+    //   },
+    //   order: {
+    //     id: 'DESC'
+    //   }
+    // });
+    const data = await this.employeeRepository
+      .createQueryBuilder("employee")
+      .leftJoinAndSelect("employee.department", "departmentName")
+      .leftJoinAndSelect("employee.designation", "designationName")
+      .leftJoinAndSelect("employee.empType", "empTypeName")
+      .leftJoinAndSelect("employee.division", "divisionName")
+      .orderBy("employee.id", "DESC")
+      .getMany();
+    return data;
   }
 
   async getAllActive() {
@@ -56,7 +65,7 @@ export class EmployeeService {
           throw new HttpException(
             {
               statusCode: HttpStatus.BAD_REQUEST,
-              message: "Department not found",
+              message: "Data not found",
               error: "Bad Request",
             },
             HttpStatus.BAD_REQUEST
@@ -67,7 +76,7 @@ export class EmployeeService {
       const employeeData = this.employeeRepository.create(createEmployeeDto);
       return await this.employeeRepository.save(employeeData);
     } catch (error) {
-      throw new Error("Failed to save employee");
+      throw new Error("Failed to save Data");
     }
   }
   async update(
@@ -86,7 +95,7 @@ export class EmployeeService {
         throw new HttpException(
           {
             statusCode: HttpStatus.NOT_FOUND,
-            message: "Employee not found",
+            message: "Data not found",
             error: "Not Found",
           },
           HttpStatus.NOT_FOUND
@@ -102,7 +111,7 @@ export class EmployeeService {
           throw new HttpException(
             {
               statusCode: HttpStatus.NOT_FOUND,
-              message: "Employee not found",
+              message: "Data not found",
               error: "Not Found",
             },
             HttpStatus.NOT_FOUND
@@ -123,14 +132,14 @@ export class EmployeeService {
     try {
       const result = await this.employeeRepository.delete(id);
       if (result.affected === 0) {
-        throw new HttpException("Employee not found", HttpStatus.NOT_FOUND);
+        throw new HttpException("Data not found", HttpStatus.NOT_FOUND);
       }
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
       }
       throw new HttpException(
-        "Failed to delete employee",
+        "Failed to delete Data",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }

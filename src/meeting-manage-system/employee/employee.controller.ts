@@ -64,7 +64,7 @@ export class EmployeeController {
   
 
   @Post()
-  async creaet(@Body() employeeDto: CreateEmployeeDTO) {
+  async create(@Body() employeeDto: CreateEmployeeDTO) {
     try {
       const results = await this.employeeService.create(employeeDto);
       return {
