@@ -8,15 +8,16 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "../users.service";
 import { CreateUserDTO } from "./create.user.dto";
+import { Response } from "express";
 
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UsersService) {}
 
   @Post()
-  async creaet(@Body() userDto: CreateUserDTO) {
+  async creaet(res: Response, @Body() userDto: CreateUserDTO) {
     try {
-      const results = await this.userService.createUser(userDto);
+      const results = await this.userService.createUser(res, userDto);
       return {
         success: true,
         statusCode: HttpStatus.OK,

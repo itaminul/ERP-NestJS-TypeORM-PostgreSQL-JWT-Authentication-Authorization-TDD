@@ -46,4 +46,6 @@ export class User {
   @ManyToMany(() => Role)
   @JoinTable()
   roles: Role[];
+  @Column()
+  roleId: number;
 }
