@@ -9,11 +9,16 @@ import {
   Patch,
   Post,
   UseFilters,
+  UseGuards,
 } from "@nestjs/common";
 import { EmployeeService } from "./employee.service";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
 import { UpdateEmployeeDTO } from "./dto/update.employee.dto";
 import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
+import { RolesGuard } from "src/common/guards/les.guard";
+import { Roles } from "src/common/decorators/roles.decorator";
+import { JwtStrategy } from "src/auth/jwt.strategy";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Controller("employee")
 @UseFilters(AllExceptionsFilter)
@@ -21,6 +26,8 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("1")
   async getAll() {
     try {
       const results = await this.employeeService.getAll();
@@ -61,7 +68,6 @@ export class EmployeeController {
       throw error;
     }
   }
-  
 
   @Post()
   async create(@Body() employeeDto: CreateEmployeeDTO) {

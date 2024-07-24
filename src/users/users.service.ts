@@ -1,20 +1,13 @@
-import {
-  BadRequestException,
-  Body,
-  HttpStatus,
-  Injectable,
-  Res,
-} from "@nestjs/common";
+import { Body, HttpStatus, Injectable, Res } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateUserDTO } from "./dto/create.user.dto";
-import { UserRepository } from "./user.repository";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { Response } from "express";
 import { LoginUserDTO } from "./dto/loign.user.dto";
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class UsersService {
   constructor(
@@ -22,8 +15,6 @@ export class UsersService {
     public readonly usersRepository: Repository<User>,
     private jwtService: JwtService,
     public readonly configService: ConfigService
-    // @InjectRepository(UserRepository)
-    // private userRepository: UserRepository,
   ) {}
 
   async createUser(@Res() res: Response, userDto: CreateUserDTO) {
@@ -51,7 +42,6 @@ export class UsersService {
       const userData = this.usersRepository.create(data);
       return await this.usersRepository.save(userData);
     } catch (error) {
-      // Handle unexpected errors
       console.error("Error creating user:", error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: "An error occurred while creating the user",
@@ -68,7 +58,7 @@ export class UsersService {
 
     if (!user) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: "User already exists",
+        message: "Invalid User",
       });
     }
 
@@ -76,37 +66,35 @@ export class UsersService {
       loginUserInput.password,
       user.password
     );
+
     if (!checkPassword) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: "Invalid username or password",
+        message: "Invalid  password",
       });
     }
     delete user.password;
-    const { password, ...result } = user;
 
     if (checkPassword) {
       const accessToken = this.generateJWT({
-        sub: user.id,
         username: user.username,
-        deptId: user.deptId,
-        desigId: user.desigId,
         roleId: user.roleId,
-        orgId: user.orgId,
       });
-
-      return {
+      return res.status(HttpStatus.FOUND).json({
         statusCode: 200,
-        message: 'Login Successfully',
+        message: "Login Successfully",
         accessToken: accessToken,
-        //   userInfo:userInfo
+      });
+    } else {
+      return {
+        statusCode: 201,
+        message: "faild Successfully",
       };
     }
-
   }
   generateJWT(payload: any) {
     return this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get('expired'),
+      secret: this.configService.get("JWT_SECRET"),
+      expiresIn: this.configService.get("expired"),
     });
   }
 
@@ -124,5 +112,3 @@ export class UsersService {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 }
- 
-
