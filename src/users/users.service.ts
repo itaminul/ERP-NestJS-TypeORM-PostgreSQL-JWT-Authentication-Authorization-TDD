@@ -1,16 +1,27 @@
-import { HttpStatus, Injectable, Res } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  HttpStatus,
+  Injectable,
+  Res,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateUserDTO } from "./dto/create.user.dto";
 import { UserRepository } from "./user.repository";
 import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 import { Response } from "express";
+import { LoginUserDTO } from "./dto/loign.user.dto";
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    public readonly usersRepository: Repository<User>
+    public readonly usersRepository: Repository<User>,
+    private jwtService: JwtService,
+    public readonly configService: ConfigService
     // @InjectRepository(UserRepository)
     // private userRepository: UserRepository,
   ) {}
@@ -48,12 +59,55 @@ export class UsersService {
     }
   }
 
-  async login() {
-    try {
-      
-    } catch (error) {
-      
+  async login(@Res() res: Response, @Body() loginUserInput: LoginUserDTO) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        username: loginUserInput.username,
+      },
+    });
+
+    if (!user) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: "User already exists",
+      });
     }
+
+    const checkPassword = await this.comparePasswords(
+      loginUserInput.password,
+      user.password
+    );
+    if (!checkPassword) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: "Invalid username or password",
+      });
+    }
+    delete user.password;
+    const { password, ...result } = user;
+
+    if (checkPassword) {
+      const accessToken = this.generateJWT({
+        sub: user.id,
+        username: user.username,
+        deptId: user.deptId,
+        desigId: user.desigId,
+        roleId: user.roleId,
+        orgId: user.orgId,
+      });
+
+      return {
+        statusCode: 200,
+        message: 'Login Successfully',
+        accessToken: accessToken,
+        //   userInfo:userInfo
+      };
+    }
+
+  }
+  generateJWT(payload: any) {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: this.configService.get('expired'),
+    });
   }
 
   async findOne(username: string): Promise<User | undefined> {
@@ -62,4 +116,13 @@ export class UsersService {
       relations: ["roles"],
     });
   }
+
+  async comparePasswords(
+    plainPassword: string,
+    hashedPassword: string
+  ): Promise<boolean> {
+    return bcrypt.compare(plainPassword, hashedPassword);
+  }
 }
+ 
+
