@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable, Res } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
@@ -15,27 +15,45 @@ export class UsersService {
     // private userRepository: UserRepository,
   ) {}
 
-  async createUser(res: Response, userDto: CreateUserDTO) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        username: userDto.username,
-      },
-    });
+  async createUser(@Res() res: Response, userDto: CreateUserDTO) {
+    try {
+      const existingUser = await this.usersRepository.findOne({
+        where: {
+          username: userDto.username,
+        },
+      });
 
-    if (user) {
-      return res.status(HttpStatus.OK).send(user);
+      if (existingUser) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          message: "User already exists",
+        });
+      }
+      const hashPassword = await bcrypt.hash(userDto.password, 10);
+      const data = {
+        username: userDto.username,
+        password: hashPassword,
+        roleId: userDto.roleId,
+        orgId: userDto.orgId,
+        desigId: userDto.desigId,
+        deptId: userDto.deptId,
+      };
+      const userData = this.usersRepository.create(data);
+      return await this.usersRepository.save(userData);
+    } catch (error) {
+      // Handle unexpected errors
+      console.error("Error creating user:", error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: "An error occurred while creating the user",
+      });
     }
-    const hashPassword = await bcrypt.hash(userDto.password, 10);
-    const data = {
-      username: userDto.username,
-      password: hashPassword,
-      roleId: userDto.roleId,
-      orgId: userDto.orgId,
-      desigId: userDto.desigId,
-      deptId: userDto.deptId,
-    };
-    const userData = this.usersRepository.create(data);
-    return await this.usersRepository.save(userData);
+  }
+
+  async login() {
+    try {
+      
+    } catch (error) {
+      
+    }
   }
 
   async findOne(username: string): Promise<User | undefined> {

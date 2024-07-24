@@ -7,7 +7,7 @@ import {
 } from "class-validator";
 
 @Injectable()
-export class CreateUserDTO {
+export class UpdateUserDTO {
   @IsString()
   @IsNotEmpty()
   username: string;

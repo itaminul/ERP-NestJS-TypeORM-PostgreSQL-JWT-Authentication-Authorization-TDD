@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Res,
 } from "@nestjs/common";
 import { UsersService } from "../users.service";
 import { CreateUserDTO } from "./create.user.dto";
@@ -15,7 +16,7 @@ export class UserController {
   constructor(private readonly userService: UsersService) {}
 
   @Post()
-  async creaet(res: Response, @Body() userDto: CreateUserDTO) {
+  async creaet( @Res() res: Response, @Body() userDto: CreateUserDTO) {
     try {
       const results = await this.userService.createUser(res, userDto);
       return {
