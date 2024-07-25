@@ -4,7 +4,10 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-} from "@nestjs/common";
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ExpiredTokenException } from 'src/auth/expired-token.exception';
+import { InvalidTokenException } from 'src/auth/invalid-token.exception';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -12,19 +15,29 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let status: number;
+    let message: string;
+
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      if (exception instanceof ExpiredTokenException) {
+        message = 'Token expired';
+      } else if (exception instanceof InvalidTokenException) {
+        message = 'Invalid token';
+      } else {
+        const response = exception.getResponse();
+        message = (typeof response === 'string') ? response : (response as any).message;
+      }
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+      message = 'Internal server error';
+    }
 
     const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message:
-        exception instanceof HttpException
-          ? exception.getResponse()
-          : "Internal server error",
+      message,
     };
 
     console.error(

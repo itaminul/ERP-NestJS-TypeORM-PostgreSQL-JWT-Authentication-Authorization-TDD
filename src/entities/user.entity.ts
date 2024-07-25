@@ -23,6 +23,9 @@ export class User {
   @Column()
   orgId: number;
 
+  @Column()
+  rolename: string;
+
   @Column({ default: true })
   activeStatus: boolean;
   @Column()

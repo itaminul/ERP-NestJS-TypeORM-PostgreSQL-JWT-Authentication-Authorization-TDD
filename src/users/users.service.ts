@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateUserDTO } from "./dto/create.user.dto";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 import { Response } from "express";
 import { LoginUserDTO } from "./dto/loign.user.dto";
@@ -35,6 +35,7 @@ export class UsersService {
         username: userDto.username,
         password: hashPassword,
         roleId: userDto.roleId,
+        rolename: userDto.rolename,
         orgId: userDto.orgId,
         desigId: userDto.desigId,
         deptId: userDto.deptId,
@@ -77,12 +78,18 @@ export class UsersService {
     if (checkPassword) {
       const accessToken = this.generateJWT({
         username: user.username,
-        roleId: user.roleId,
+        rolename: user.rolename,
       });
+
+      const payload = { username: user.username, sub: user.id, rolename: user.rolename };
+    // return {
+      // access_token: this.jwtService.sign(payload),
+    // };
+
       return res.status(HttpStatus.FOUND).json({
         statusCode: 200,
         message: "Login Successfully",
-        accessToken: accessToken,
+        accessToken: this.generateJWT(payload),
       });
     } else {
       return {

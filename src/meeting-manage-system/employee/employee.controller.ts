@@ -19,15 +19,17 @@ import { RolesGuard } from "src/common/guards/les.guard";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { JwtStrategy } from "src/auth/jwt.strategy";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("employee")
 @UseFilters(AllExceptionsFilter)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
+
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("1")
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Roles("admin")
   async getAll() {
     try {
       const results = await this.employeeService.getAll();
