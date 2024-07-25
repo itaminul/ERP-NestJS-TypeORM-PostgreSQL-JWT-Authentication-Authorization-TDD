@@ -9,4 +9,11 @@ export class DesignationService {
     @InjectRepository(Designation)
     public readonly useRepository: Repository<Designation>
   ) {}
+
+  async getAll() {
+    const results = await this.useRepository
+      .createQueryBuilder("Designation")
+      .getMany();
+    return results;
+  }
 }
