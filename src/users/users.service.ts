@@ -80,16 +80,10 @@ export class UsersService {
         username: user.username,
         rolename: user.rolename,
       });
-
-      const payload = { username: user.username, sub: user.id, rolename: user.rolename };
-    // return {
-      // access_token: this.jwtService.sign(payload),
-    // };
-
       return res.status(HttpStatus.FOUND).json({
         statusCode: 200,
         message: "Login Successfully",
-        accessToken: this.generateJWT(payload),
+        accessToken: accessToken,
       });
     } else {
       return {
@@ -100,15 +94,14 @@ export class UsersService {
   }
   generateJWT(payload: any) {
     return this.jwtService.sign(payload, {
-      secret: this.configService.get("JWT_SECRET"),
+      secret: process.env.JWT_SECRET, //this.configService.get("JWT_SECRET"),
       expiresIn: this.configService.get("expired"),
     });
   }
 
   async findOne(username: string): Promise<User | undefined> {
     return this.usersRepository.findOne({
-      where: { username },
-      relations: ["roles"],
+      where: { username }
     });
   }
 

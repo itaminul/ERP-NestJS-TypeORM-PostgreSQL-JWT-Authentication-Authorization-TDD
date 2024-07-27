@@ -15,21 +15,20 @@ import { EmployeeService } from "./employee.service";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
 import { UpdateEmployeeDTO } from "./dto/update.employee.dto";
 import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
-import { RolesGuard } from "src/common/guards/les.guard";
-import { Roles } from "src/common/decorators/roles.decorator";
 import { JwtStrategy } from "src/auth/jwt.strategy";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { AuthGuard } from "@nestjs/passport";
+import { Roles } from "src/roles/roles.decorator";
+import { Role } from "src/roles/role.enum";
+import { RolesGuard } from "src/roles/roles.guard";
 
 @Controller("employee")
 @UseFilters(AllExceptionsFilter)
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
-
-
   @Get()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Roles("admin")
+  @Roles(Role.User, Role.Admin)
   async getAll() {
     try {
       const results = await this.employeeService.getAll();
