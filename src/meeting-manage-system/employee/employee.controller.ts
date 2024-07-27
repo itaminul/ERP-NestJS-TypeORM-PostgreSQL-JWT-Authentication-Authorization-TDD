@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -15,7 +16,6 @@ import { EmployeeService } from "./employee.service";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
 import { UpdateEmployeeDTO } from "./dto/update.employee.dto";
 import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
-import { JwtStrategy } from "src/auth/jwt.strategy";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { AuthGuard } from "@nestjs/passport";
 import { Roles } from "src/roles/roles.decorator";
@@ -24,7 +24,7 @@ import { RolesGuard } from "src/roles/roles.guard";
 
 @Controller("employee")
 @UseFilters(AllExceptionsFilter)
-@UseGuards(AuthGuard('jwt'), RolesGuard)
+@UseGuards(AuthGuard("jwt"), RolesGuard)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
   @Get()
@@ -43,6 +43,7 @@ export class EmployeeController {
   }
 
   @Get("/getAllActive")
+  @Roles(Role.Admin, Role.User)
   async getAllActive() {
     try {
       const results = await this.employeeService.getAllActive();
@@ -57,6 +58,7 @@ export class EmployeeController {
   }
 
   @Get("/getAllInActive")
+  @Roles(Role.Admin, Role.User)
   async getAllInActive() {
     try {
       const results = await this.employeeService.getAllInactive();
@@ -71,6 +73,7 @@ export class EmployeeController {
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() employeeDto: CreateEmployeeDTO) {
     try {
       const results = await this.employeeService.create(employeeDto);
@@ -93,6 +96,7 @@ export class EmployeeController {
   }
 
   @Patch(":id")
+  @Roles(Role.Admin, Role.User)
   async update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateEmployeeDto: UpdateEmployeeDTO
@@ -107,6 +111,22 @@ export class EmployeeController {
         statusCode: HttpStatus.OK,
         message: "Employee updated successfully",
         data: updatedEmployee,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete(":id")
+  @Roles(Role.Admin)
+  async deleteEmployeeById(@Param("id", ParseIntPipe) id: number) {
+    try {
+      const deleteEmployee = await this.employeeService.deleteEmployeeById(id);
+      return {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "Deleted successfully",
+        data: deleteEmployee,
       };
     } catch (error) {
       throw error;
