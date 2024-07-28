@@ -10,6 +10,9 @@ import { Role } from "./entities/role.entity";
 import { EmployeeType } from "./entities/employeeType.entity";
 import { DivisionEntity } from "./entities/division.entity";
 import { DistrictEntity } from "./entities/district.entity";
+import { MeetingRoom } from "./entities/meetingRoom.entity";
+import { LabelEntity } from "./entities/label.entity";
+import { BuildingEntity } from "./entities/building.entity";
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
   name: "pm_main",
@@ -30,6 +33,9 @@ export const dataSourceOptions: DataSourceOptions = {
     DistrictEntity,
     User,
     Role,
+    MeetingRoom,
+    LabelEntity,
+    BuildingEntity
   ],
   migrations: ["dist/migrations/*.js"],
 };
