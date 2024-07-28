@@ -13,13 +13,20 @@ export class BuildingService {
   ) {}
 
   async getAll() {
-    return await this.buildingRepository.find();
+    return await this.buildingRepository.find({
+      order: {
+        id: "DESC",
+      },
+    });
   }
 
   async getAllActive() {
     return await this.buildingRepository.find({
       where: {
         activeStatus: true,
+      },
+      order: {
+        id: "DESC",
       },
     });
   }
@@ -28,6 +35,9 @@ export class BuildingService {
     return await this.buildingRepository.find({
       where: {
         activeStatus: false,
+      },
+      order: {
+        id: "DESC",
       },
     });
   }
