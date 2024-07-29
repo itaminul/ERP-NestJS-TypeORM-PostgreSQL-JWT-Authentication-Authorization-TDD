@@ -11,6 +11,8 @@ import {
   Post,
   UseFilters,
   UseGuards,
+  Session,
+  Request,
 } from "@nestjs/common";
 import { EmployeeService } from "./employee.service";
 import { CreateEmployeeDTO } from "./dto/create.employee.dto";
@@ -21,7 +23,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { Roles } from "src/roles/roles.decorator";
 import { Role } from "src/roles/role.enum";
 import { RolesGuard } from "src/roles/roles.guard";
-
+import { User } from "src/entities/user.entity";
+import { GetUserInfo } from "src/users/user.decorator";
 @Controller("employee")
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard("jwt"), RolesGuard)
@@ -29,7 +32,7 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
   @Get()
   @Roles(Role.User, Role.Admin)
-  async getAll() {
+  async getAll(@GetUserInfo() user: User) {
     try {
       const results = await this.employeeService.getAll();
       return {

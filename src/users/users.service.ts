@@ -77,7 +77,11 @@ export class UsersService {
 
     if (checkPassword) {
       const accessToken = this.generateJWT({
+        id: user.id,
         username: user.username,
+        orgId: user.orgId,
+        deptId: user.deptId,
+        desigId: user.desigId,
         rolename: user.rolename,
       });
       return res.status(HttpStatus.FOUND).json({
