@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -19,11 +20,11 @@ import { Role } from "src/roles/role.enum";
 
 @Controller("building")
 @UseFilters(AllExceptionsFilter)
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard("jwt"))
 export class BuildingController {
   constructor(public readonly buildingService: BuildingService) {}
   @Get()
-  @Roles(Role.User)
+  @Roles(Role.Admin, Role.User)
   async getAll() {
     try {
       const results = await this.buildingService.getAll();
@@ -36,7 +37,7 @@ export class BuildingController {
       throw error;
     }
   }
-
+  @Roles(Role.Admin)
   @Post()
   async create(@Body() createBuildingDto: CreateBuildingDto) {
     try {
@@ -50,6 +51,7 @@ export class BuildingController {
       throw error;
     }
   }
+  @Roles(Role.Admin)
   @Patch(":id")
   async update(
     @Param("id") id: number,
@@ -57,6 +59,20 @@ export class BuildingController {
   ) {
     try {
       const results = await this.buildingService.update(id, updateBuildingDto);
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        results,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+  @Roles(Role.Admin)
+  @Delete(":id")
+  async remove(@Param("id") id: number) {
+    try {
+      const results = await this.buildingService.remove(id);
       return {
         success: true,
         status: HttpStatus.OK,
