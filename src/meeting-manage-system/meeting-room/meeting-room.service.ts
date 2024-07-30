@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Body, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MeetingRoom } from "src/entities/meetingRoom.entity";
+import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
+import { CreateMeetingRoomDTO } from "./dto/create.meeting.room.dto";
 
 @Injectable()
 export class MeetingRoomService {
@@ -49,5 +51,22 @@ export class MeetingRoomService {
         id: "DESC",
       },
     });
+  }
+
+  async create(
+    userInfo: User,
+    @Body() createMeetingRoomDto: CreateMeetingRoomDTO
+  ) {
+    try {
+      const getUserInfo = {};
+      const data = {
+        ...createMeetingRoomDto,
+        ...getUserInfo,
+      };
+      const dataStore = this.meetingRoomRepository.create(data);
+      return await this.meetingRoomRepository.save(dataStore);
+    } catch (error) {
+      throw error;
+    }
   }
 }
