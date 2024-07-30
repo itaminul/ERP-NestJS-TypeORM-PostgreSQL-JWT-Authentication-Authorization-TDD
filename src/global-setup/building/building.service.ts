@@ -44,7 +44,10 @@ export class BuildingService {
     });
   }
 
-  async create(@GetUserInfo() user: User, @Body() createBuildingDto: CreateBuildingDto) {
+  async create(
+    @GetUserInfo() user: User,
+    @Body() createBuildingDto: CreateBuildingDto
+  ) {
     try {
       const data = this.buildingRepository.create(createBuildingDto);
       return await this.buildingRepository.save(data);
