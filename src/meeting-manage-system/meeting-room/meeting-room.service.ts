@@ -41,11 +41,11 @@ export class MeetingRoomService {
       },
     });
   }
-  async getAllActiveByOrganizationWise() {
+  async getAllActiveByOrganizationWise(userInfo: User) {
     return await this.meetingRoomRepository.find({
       where: {
         activeStatus: true,
-        orgId: 1,
+        orgId: userInfo.orgId,
       },
       order: {
         id: "DESC",
