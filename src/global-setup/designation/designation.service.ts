@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Designation } from "src/entities/designation.entity";
 import { Repository } from "typeorm";
@@ -50,6 +50,21 @@ export class DesignationService {
 
   async update(id: number, updateDesignationDto: UpdateDesignationDTO) {
     try {
+      const designation = await this.designationRepository.findOne({
+        where: { id: id },
+      });
+
+      if (!designation) {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "Designation not found",
+            error: "Not Found",
+          },
+          HttpStatus.NOT_FOUND
+        );
+      }
+
       return this.designationRepository.update(id, updateDesignationDto);
     } catch (error) {
       throw new Error("Failed to save");
@@ -58,9 +73,18 @@ export class DesignationService {
 
   async deleteDesignation(id: number) {
     try {
-      return this.designationRepository.delete(id);
+      const result = await this.designationRepository.delete(id);
+      if (result.affected === 0) {
+        throw new HttpException("Employee not found", HttpStatus.NOT_FOUND);
+      }
     } catch (error) {
-      throw new Error("Failed to delete");
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        "Failed to delete employee",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }
