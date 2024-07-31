@@ -12,6 +12,10 @@ import { Designation } from "./designation.entity";
 import { Religion } from "./religion.entity";
 import { BloodGroup } from "./bloodgroup.entity";
 import { IsBoolean, IsNumber } from "class-validator";
+import { EmployeeType } from "./employeeType.entity";
+import { DivisionEntity } from "./division.entity";
+import { DistrictEntity } from "./district.entity";
+import { distinct } from "rxjs";
 
 @Entity()
 export class Employee {
@@ -46,8 +50,6 @@ export class Employee {
   @Column({ nullable: true })
   nationalId: number;
   @Column({ nullable: true })
-  empType: number;
-  @Column({ nullable: true })
   leaveApplicableStatus: boolean;
   @Column({ nullable: true })
   dateOfBirts: string;
@@ -73,7 +75,7 @@ export class Employee {
   motherProfe: number;
   @Column({ nullable: true })
   motherMobile: string;
-  @Column({ default: true, nullable: false }) 
+  @Column({ default: true, nullable: false })
   activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
@@ -119,4 +121,28 @@ export class Employee {
   bloodgroup: BloodGroup;
   @Column({ nullable: true })
   bloodgroupId: number;
+
+  @ManyToOne(() => EmployeeType, (employeeType) => employeeType.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "empTypeId" })
+  empType: EmployeeType;
+  @Column({ nullable: true })
+  empTypeId: number;
+
+  @ManyToOne(() => DivisionEntity, (division) => division.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "divisionId" })
+  division: DivisionEntity;
+  @Column({ nullable: true })
+  divisionId: number;
+
+  @ManyToOne(() => DistrictEntity, (district) => district.employees, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "districtId" })
+  district: DistrictEntity;
+  @Column({ nullable: true })
+  districtId: number;
 }

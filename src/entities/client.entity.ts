@@ -9,26 +9,32 @@ import {
 import { Employee } from "./employee.entity";
 
 @Entity()
-export class EmployeeType {
-  static employees(
-    arg0: () => any,
-    employees: any,
-    arg2: { nullable: true }
-  ): (target: Employee, propertyKey: "empType") => void {
-    throw new Error("Method not implemented.");
-  }
+export class Client {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  empTypeName: string;
+  clientName: string;
   @Column({ nullable: true })
-  empTypeDes: string;
+  clientDescription: string;
+
+  @Column({ nullable: true })
+  clientAddress: string;
+
+  @Column({ nullable: true })
+  clientPhone: string;
+  @Column({ nullable: true })
+  clientEmail: string;
+  @Column({
+    default: 1,
+    comment: "Client type like home and abroad and 1 for home and 2 for aboard",
+  })
+  clientType: number;
   @Column({ nullable: true })
   orgId: number;
   @Column({ nullable: true })
   serialNo: number;
   @Column({ default: true })
-  isActive: boolean;
+  activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })
@@ -43,6 +49,4 @@ export class EmployeeType {
   updatedBy: number;
   @OneToMany(() => Employee, (employee) => employee.bloodGroupId)
   employees: Employee[];
-  @OneToMany(() => Employee, (employee) => employee.empType)
-  empType: Employee[];
 }

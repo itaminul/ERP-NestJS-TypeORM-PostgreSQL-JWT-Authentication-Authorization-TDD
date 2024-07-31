@@ -1,8 +1,10 @@
 import { Module } from "@nestjs/common";
+import { ClientModule } from "src/global-setup/client/client.module";
 import { DesignationModule } from "src/global-setup/designation/designation.module";
+import { MeetingRoomModule } from "src/meeting-manage-system/meeting-room/meeting-room.module";
 
 @Module({
-  imports: [DesignationModule],
+  imports: [DesignationModule, ClientModule, MeetingRoomModule],
   providers: [],
   controllers: [],
 })

@@ -6,29 +6,22 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Employee } from "./employee.entity";
+import { MeetingRoom } from "./meetingRoom.entity";
 
 @Entity()
-export class EmployeeType {
-  static employees(
-    arg0: () => any,
-    employees: any,
-    arg2: { nullable: true }
-  ): (target: Employee, propertyKey: "empType") => void {
-    throw new Error("Method not implemented.");
-  }
+export class LabelEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  empTypeName: string;
+  labelName: string;
   @Column({ nullable: true })
-  empTypeDes: string;
+  labelDes: string;
   @Column({ nullable: true })
   orgId: number;
   @Column({ nullable: true })
   serialNo: number;
   @Column({ default: true })
-  isActive: boolean;
+  activeStatus: boolean;
   @Column({ nullable: true })
   createdBy: number;
   @CreateDateColumn({ type: "timestamptz", nullable: true })
@@ -41,8 +34,6 @@ export class EmployeeType {
   updatedAt: Date;
   @Column({ nullable: true })
   updatedBy: number;
-  @OneToMany(() => Employee, (employee) => employee.bloodGroupId)
-  employees: Employee[];
-  @OneToMany(() => Employee, (employee) => employee.empType)
-  empType: Employee[];
+  @OneToMany(() => MeetingRoom, (meetingRoom) => meetingRoom.labelId)
+  meetingRoomForLabel: MeetingRoom[];
 }
