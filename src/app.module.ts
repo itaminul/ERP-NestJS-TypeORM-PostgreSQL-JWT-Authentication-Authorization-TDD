@@ -17,6 +17,7 @@ import { UsersService } from "./users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { DivisionModule } from './global-setup/division/division.module';
 import { RolesGuard } from "./roles/roles.guard";
+import { BuildingModule } from './global-setup/building/building.module';
 @Module({
   imports: [
     ConfigModule,
@@ -33,6 +34,7 @@ import { RolesGuard } from "./roles/roles.guard";
     MeetingManageSystemModule,
     EmployeTypeModule,
     DivisionModule,
+    BuildingModule,
   ],
   controllers: [AppController],
   providers: [
