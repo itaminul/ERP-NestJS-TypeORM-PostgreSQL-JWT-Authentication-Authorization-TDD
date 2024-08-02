@@ -6,7 +6,7 @@ import {
   IsString,
 } from "class-validator";
 
-export class CreateBuildingDto {
+export class UpdateBuildingDto {
   @IsNotEmpty()
   @IsString()
   buildingName: string;
@@ -19,4 +19,7 @@ export class CreateBuildingDto {
   @IsOptional()
   @IsNumber()
   serialNo: number;
+  @IsNotEmpty()
+  @IsBoolean()
+  activeStatus: boolean;
 }
