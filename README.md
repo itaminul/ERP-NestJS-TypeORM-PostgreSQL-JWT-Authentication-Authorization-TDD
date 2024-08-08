@@ -1,36 +1,34 @@
+# ERP using NestJS, TypeORM, PostgreSQL
+This project demonstrates how to implement Authentication and Authorization, session-based authentication in a NestJS application using PostgreSQL as the database with TypeOrm. It covers user creation, authentication, and route protection.
 
-## Description
+## Prerequisites
++ Node.js installed on your system.
++ PostgreSQL installed and running.
 
-ERP using NestJS, TypeORM, PostgreSQL
+## Setup & Installation
+1. Install Dependencies: Run `npm install` to install dependencies.
+2. Set Up PostgreSQL Database.
+3. Configure the database connection .
+4. Run `npm run start:dev` to start the server.
 
-## Installation
+## Features
++ User Registration: Allows users to sign up with a username and password.
++ User Authentication: Users can log in with their credentials.
++ Session Management: Utilizes express-session for session management.
++ Route Protection: Protects routes to ensure only authenticated users can access them.
 
-```bash
-$ npm install
-```
+## List of Modules
 
-## Running the app
+- Meeting Management System
 
-```bash
-# development
-$ npm run start
+## Usage
++ Sign Up: Send a POST request to api/user with a username and password.
++ Log In: Send a POST request to api/user/login with the same credentials.
++ Access Protected Route: After logging in, you can access protected routes.
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+## References
+- NestJS Documentation
+- PostgreSQL Documentation
+- Passport.js Documentation
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
