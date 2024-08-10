@@ -51,4 +51,5 @@ export class User {
   roles: Role[];
   @Column()
   roleId: number;
+  
 }
