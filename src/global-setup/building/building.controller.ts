@@ -17,6 +17,8 @@ import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
 import { AuthGuard } from "@nestjs/passport";
 import { Roles } from "src/roles/roles.decorator";
 import { Role } from "src/roles/role.enum";
+import { GetUserInfo } from "src/users/user.decorator";
+import { User } from "src/entities/user.entity";
 
 @Controller("building")
 @UseFilters(AllExceptionsFilter)
@@ -39,9 +41,15 @@ export class BuildingController {
   }
   @Roles(Role.Admin)
   @Post()
-  async create(@Body() createBuildingDto: CreateBuildingDto) {
+  async create(
+    @GetUserInfo() userInfo: User,
+    @Body() createBuildingDto: CreateBuildingDto
+  ) {
     try {
-      const results = await this.buildingService.create(createBuildingDto);
+      const results = await this.buildingService.create(
+        userInfo,
+        createBuildingDto
+      );
       return {
         success: true,
         status: HttpStatus.OK,

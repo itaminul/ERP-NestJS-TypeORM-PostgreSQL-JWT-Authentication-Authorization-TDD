@@ -18,6 +18,7 @@ import { JwtService } from "@nestjs/jwt";
 import { DivisionModule } from './global-setup/division/division.module';
 import { RolesGuard } from "./roles/roles.guard";
 import { BuildingModule } from './global-setup/building/building.module';
+import { LabelModule } from './global-setup/label/label.module';
 @Module({
   imports: [
     ConfigModule,
@@ -35,6 +36,7 @@ import { BuildingModule } from './global-setup/building/building.module';
     EmployeTypeModule,
     DivisionModule,
     BuildingModule,
+    LabelModule,
   ],
   controllers: [AppController],
   providers: [

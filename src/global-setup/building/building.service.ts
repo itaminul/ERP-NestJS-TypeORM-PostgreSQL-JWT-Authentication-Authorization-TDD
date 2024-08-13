@@ -4,6 +4,8 @@ import { BuildingEntity } from "src/entities/building.entity";
 import { Repository } from "typeorm";
 import { CreateBuildingDto } from "./dto/create.building.dto";
 import { UpdateBuildingDto } from "./dto/update.building.dto";
+import { GetUserInfo } from "src/users/user.decorator";
+import { User } from "src/entities/user.entity";
 
 @Injectable()
 export class BuildingService {
@@ -42,7 +44,7 @@ export class BuildingService {
     });
   }
 
-  async create(@Body() createBuildingDto: CreateBuildingDto) {
+  async create(@GetUserInfo() user: User, @Body() createBuildingDto: CreateBuildingDto) {
     try {
       const data = this.buildingRepository.create(createBuildingDto);
       return await this.buildingRepository.save(data);
