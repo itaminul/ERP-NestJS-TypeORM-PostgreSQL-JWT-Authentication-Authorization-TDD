@@ -19,9 +19,12 @@ import { DivisionModule } from './global-setup/division/division.module';
 import { RolesGuard } from "./roles/roles.guard";
 import { BuildingModule } from './global-setup/building/building.module';
 import { LabelModule } from './global-setup/label/label.module';
+import { RolesGuards } from "./roles/roles.guards";
+import { RouteRole } from "./entities/routeRole";
 @Module({
   imports: [
     ConfigModule,
+    TypeOrmModule.forFeature([RouteRole]),
     TypeOrmModule.forRoot(dataSourceOptions),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,7 +48,7 @@ import { LabelModule } from './global-setup/label/label.module';
       // provide: APP_FILTER,
       useClass: AllExceptionsFilter,
       provide: APP_GUARD,
-      useValue: RolesGuard
+      useValue: [RolesGuard],
     },
     // AuthService,
     // UsersService,
