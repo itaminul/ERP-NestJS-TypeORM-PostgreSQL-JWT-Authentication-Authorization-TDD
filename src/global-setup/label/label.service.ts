@@ -57,7 +57,11 @@ export class LabelService {
     return this.labelRepository.save(data);
   }
 
-  async update(id: number, @Body() updateLabelDto: UpdateLabelDto) {
+  async update(
+    id: number,
+    userInfo: User,
+    @Body() updateLabelDto: UpdateLabelDto
+  ) {
     try {
       const ifExists = await this.labelRepository.findOne({
         where: {
@@ -78,10 +82,47 @@ export class LabelService {
 
       if (ifExists.id) {
         ifExists.id = id;
-        return await this.labelRepository.save(updateLabelDto);
+        const customeData = {
+          orgId: userInfo.orgId,
+          updatedBy: userInfo.id,
+        };
+
+        const storeData = {
+          ...updateLabelDto,
+          ...customeData,
+        };
+
+        return await this.labelRepository.update(id, storeData);
       }
     } catch (error) {
       throw new Error("Faild to data update");
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const checkExist = await this.labelRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!checkExist) {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "Data not found",
+            error: "Not Found",
+          },
+          HttpStatus.NOT_FOUND
+        );
+      }
+      if (checkExist.id) {
+        checkExist.id = id;
+        return await this.labelRepository.delete(id);
+      }
+    } catch (error) {
+      throw new Error("Faild to data delete");
     }
   }
 }
