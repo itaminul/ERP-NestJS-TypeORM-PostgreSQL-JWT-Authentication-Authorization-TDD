@@ -2,11 +2,9 @@ import { Body, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LabelEntity } from "src/entities/label.entity";
 import { User } from "src/entities/user.entity";
-import { GetUserInfo } from "src/users/user.decorator";
 import { Repository } from "typeorm";
 import { CreateLabelDto } from "./dto/create.label.dto";
 import { UpdateLabelDto } from "./dto/update.label.dto";
-import { error } from "console";
 
 @Injectable()
 export class LabelService {
@@ -48,6 +46,7 @@ export class LabelService {
   async create(userInfo: User, @Body() createLabelDto: CreateLabelDto) {
     const customeData = {
       orgId: userInfo.orgId,
+      createdBy: userInfo.id,
     };
     const storeData = {
       ...createLabelDto,
