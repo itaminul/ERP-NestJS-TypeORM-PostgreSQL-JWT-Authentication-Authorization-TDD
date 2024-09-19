@@ -58,7 +58,9 @@ export class MeetingRoomService {
     @Body() createMeetingRoomDto: CreateMeetingRoomDTO
   ) {
     try {
-      const getUserInfo = {};
+      const getUserInfo = {
+        createdBy: userInfo.id,
+      };
       const data = {
         ...createMeetingRoomDto,
         ...getUserInfo,
