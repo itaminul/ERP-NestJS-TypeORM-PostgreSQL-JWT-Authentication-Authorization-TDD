@@ -21,6 +21,7 @@ import { BuildingModule } from './global-setup/building/building.module';
 import { LabelModule } from './global-setup/label/label.module';
 import { RolesGuards } from "./roles/roles.guards";
 import { RouteRole } from "./entities/routeRole";
+import { MeetingModule } from './meeting-manage-system/meeting/meeting.module';
 @Module({
   imports: [
     ConfigModule,
@@ -40,6 +41,7 @@ import { RouteRole } from "./entities/routeRole";
     DivisionModule,
     BuildingModule,
     LabelModule,
+    MeetingModule,
   ],
   controllers: [AppController],
   providers: [

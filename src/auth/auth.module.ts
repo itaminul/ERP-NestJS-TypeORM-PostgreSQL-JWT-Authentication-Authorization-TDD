@@ -8,10 +8,12 @@ import { JwtModule, JwtService } from "@nestjs/jwt";
 import { JwtStrategy } from "./jwt.strategy";
 import { PassportModule } from "@nestjs/passport";
 import { SessionSerializer } from "./session.serializer";
+import { Role } from "src/entities/role.entity";
+import { RoutePermission } from "src/entities/routePermission";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role, RoutePermission]),
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: process.env.JWT_SECRET, // Replace with your secret
@@ -21,4 +23,4 @@ import { SessionSerializer } from "./session.serializer";
   providers: [UsersService, AuthService, JwtStrategy, JwtService, SessionSerializer],
   controllers: [AuthController],
 })
-export class DepartmentModule {}
+export class AuthModule {}

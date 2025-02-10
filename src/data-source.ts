@@ -14,6 +14,7 @@ import { MeetingRoom } from "./entities/meetingRoom.entity";
 import { LabelEntity } from "./entities/label.entity";
 import { BuildingEntity } from "./entities/building.entity";
 import { RouteRole } from "./entities/routeRole";
+import { RoutePermission } from "./entities/routePermission";
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
   name: "pm_main",
@@ -37,7 +38,8 @@ export const dataSourceOptions: DataSourceOptions = {
     MeetingRoom,
     LabelEntity,
     BuildingEntity,
-    RouteRole
+    RouteRole,
+    RoutePermission
   ],
   migrations: ["dist/migrations/*.js"],
 };
